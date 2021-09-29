@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.site.p0830.mapper.event01Mapper">
+  
+   <!-- 게시판 전체검색  -->
+	<select id="selectBoardList" resultType="com.site.p0830.vo.BoardVo">
+		select * from
+			(select rownum rnum,b.* from
+			(select * from board
+			order by bgroup desc,bstep asc) b)
+			where rnum between #{startrow} and #{endrow}
+	</select>
+	
+    <!-- 게시글 전체개수  -->
+	<select id="selectListCount" resultType="int">
+		select count(*) from board
+		<where>
+			<if test="category == null">
+			</if>
+			<if test="category == 'ball'">
+			  btitle like '%'||#{searchWord}||'%' or bcontent like '%'||#{searchWord}||'%'
+			</if>
+			<if test="category == 'btitle'">
+			  btitle like '%'||#{searchWord}||'%'
+			</if>
+			<if test="category == 'bcontent'">
+			  bcontent like '%'||#{searchWord}||'%'
+			</if>
+		</where>
+		
+	</select>
+  <select id="selectOneList" resultType="com.site.p0830.vo.BoardVo">
+  	select * from board where bid=#{bid}
+  </select>
+  
+  <update id="updateBhut">
+  	update board set bhit = bhit+1 where bid=#{bid}
+  	  </update>
+  
+	<select id="selectReplyAll" resultType="com.site.p0830.vo.EventVo">
+		select * from cboard where bid=#{bid}
+	</select> 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+   
+    <!-- 댓글 전체검색  -->
+	
+    <!-- 댓글 1개 검색  -->
+<!-- 	<select id="selectEventOne" resultType="com.site.p0830.vo.EventVo">
+		select * from cboard where cno=#{cno}
+	</select> -->
+	
+    <!-- 댓글 전체개수  -->
+	<!-- <select id="selectEventCount" resultType="int">
+		select count(*) from cboard where bid=#{bid}
+	</select> -->
+	
+    <!-- 댓글 저장  -->
+    <!-- <insert id="insertReplyWrite" >
+       <selectKey resultType="int" keyProperty="cno" order="BEFORE">
+           select cboard_seq.nextval from dual
+       </selectKey> -->
+    
+     <!--   insert into cboard values (
+         #{cno},#{bid},#{id},#{cpw},#{ccontent},sysdate
+       )
+    </insert> -->
+	
+	
+
+</mapper>
